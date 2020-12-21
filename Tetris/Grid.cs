@@ -13,7 +13,7 @@ namespace Tetris
     {
         public int Width { get; }
         public int Height { get; }
-        public Cell[,] Cells { get; private set; }
+        public Cell[,] Cells { get; set; }
 
         public Grid(int width = 10, int height = 24)
         {
