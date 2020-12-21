@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    public interface IPiece
+    public interface ITetrisPiece
     {
         int NumberOfBlocks { get; }
         int[] XPositions { get; }
         int[] YPositions { get; }
         Color Color { get; }
+
+        void RotateClockwise();
+        void RotateCounterclockwise();
     }
 }
