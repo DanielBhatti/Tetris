@@ -29,5 +29,10 @@ namespace Tetris
         {
             Color = Color.Transparent;
         }
+
+        public void Fill(Color color)
+        {
+            Color = color;
+        }
     }
 }
