@@ -10,8 +10,13 @@ namespace Tetris
     {
         public IPiece(Color color = Color.Teal)
         {
-            XPositions = new int[4] { -1, 0, 1, 2 };
-            YPositions = new int[4] { 0, 0, 0, 0 };
+            Positions = new Position[4]
+            {
+                new Position(-1, 0),
+                new Position(0, 0),
+                new Position(1, 0),
+                new Position(2, 0)
+            };
             Color = color;
         }
     }

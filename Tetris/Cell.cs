@@ -7,24 +7,27 @@ using System.Threading.Tasks;
 namespace Tetris
 {
     /// <summary>
-    /// Container class for a <see cref="Block"/>.
-    /// A Block object is either locked or not locked in a Cell.
-    /// If it is locked, it is assumed to be fixed in place (i.e. the player cannot move it)
+    /// Represents a cell to hold Tetris pieces.
+    /// If it is filled, it is assumed that the cell contains a block (i.e. the player cannot move it).
+    /// A new piece should not be able to be placed into a filled cell.
     /// </summary>
     public class Cell
     {
-        public Block Block { get; set; }
-        public bool IsLocked { get; set; }
+        public Color Color { get; set; }
+        public bool IsFilled { get
+            {
+                if (Color == Color.Transparent) return false;
+                else return true;
+            } }
 
-        public Cell(Block block)
+        public Cell(Color color = Color.Transparent)
         {
-            Block = block;
+            Color = color;
         }
 
-        public bool IsEmpty()
+        public void Reset()
         {
-            if (Block == null) return true;
-            else return false;
+            Color = Color.Transparent;
         }
     }
 }

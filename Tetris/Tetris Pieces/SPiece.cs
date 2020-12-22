@@ -10,8 +10,13 @@ namespace Tetris
     {
         public SPiece(Color color = Color.Red)
         {
-            XPositions = new int[4] { 0, 1, -1, 0 };
-            YPositions = new int[4] { 0, 0, -1, -1 };
+            Positions = new Position[4]
+            {
+                new Position(0, 0),
+                new Position(1, 0),
+                new Position(-1, -1),
+                new Position(0, -1)
+            };
             Color = color;
         }
     }

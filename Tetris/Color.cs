@@ -11,6 +11,7 @@ namespace Tetris
     /// </summary>
     public enum Color
     {
+        Transparent,
         Teal,
         Blue,
         Orange,
