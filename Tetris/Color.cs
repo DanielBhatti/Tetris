@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Tetris
 {
     /// <summary>
-    /// Basic colors for the different Tetris <see cref="TetrisPiece"/>s.
+    /// Basic colors for the different <see cref="TetrisPiece"/>s.
     /// </summary>
     public enum Color
     {
