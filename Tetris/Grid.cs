@@ -33,6 +33,7 @@ namespace Tetris
             PieceGenerator = new BPSGenerator();
             CenterPosition = new Position(width / 2, height - 2);
             CurrentPositions = new List<Position>() { };
+            NextPiece();
             foreach(Position p in CurrentPiece.Positions)
             {
                 CurrentPositions.Add(new Position(p.X + CenterPosition.X, p.Y + CenterPosition.Y));

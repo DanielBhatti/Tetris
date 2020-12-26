@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using Tetris;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,11 +8,11 @@ namespace Tetris_WPF
 {
     public class MainViewModel : ViewModelBase
     {
-        public string BindingTestString { get; set; }
+        public Grid TetrisGrid { get; set; }
 
         public MainViewModel()
         {
-            BindingTestString = "Test Value";
+            TetrisGrid = new Grid();
         }
     }
 }

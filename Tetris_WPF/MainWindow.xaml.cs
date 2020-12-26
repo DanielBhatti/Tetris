@@ -27,6 +27,28 @@ namespace Tetris_WPF
             InitializeComponent();
             _mainViewModel = new MainViewModel();
             DataContext = _mainViewModel;
+
+            Grid_Tetris.Rows = _mainViewModel.TetrisGrid.Height;
+            Grid_Tetris.Columns = _mainViewModel.TetrisGrid.Width;
+
+            for (int i = 0; i < _mainViewModel.TetrisGrid.Height; i++)
+            {
+                for (int j = 0; j < _mainViewModel.TetrisGrid.Width; j++)
+                {
+                    BitmapImage b = new BitmapImage();
+                    b.BeginInit();
+                    b.UriSource = new Uri(@"C:\Users\bhatt\Documents\Programming\Tetris\Tetris_WPF\Resources\white_block.png");
+                    b.EndInit();
+
+                    Image image = new Image();
+                    image.Source = b;
+                    image.Stretch = Stretch.Fill;
+
+                    Grid.SetRow(image, i);
+                    Grid.SetColumn(image, j);
+                    Grid_Tetris.Children.Add(image);
+                }
+            }
         }
     }
 }

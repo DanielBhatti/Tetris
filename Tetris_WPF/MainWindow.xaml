@@ -5,9 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Tetris_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="900" Width="800"
 >
-    <Grid>
-        <TextBlock Text="{Binding BindingTestString}"/>
-    </Grid>
+    <UniformGrid Name="Grid_Tetris" Width="5in" Height="8in">
+    </UniformGrid>
 </Window>

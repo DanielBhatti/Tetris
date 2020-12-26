@@ -8,12 +8,51 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\black_block.png" />
+    <None Remove="Resources\blue_block.png" />
+    <None Remove="Resources\green_block.png" />
+    <None Remove="Resources\orange_block.png" />
+    <None Remove="Resources\purple_block.png" />
+    <None Remove="Resources\red_block.png" />
+    <None Remove="Resources\teal_block.png" />
+    <None Remove="Resources\white_block.png" />
+    <None Remove="Resources\yellow_block.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommonServiceLocator" Version="2.0.5" />
     <PackageReference Include="MvvmLightLibsStd10" Version="5.4.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Tetris\Tetris.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\black_block.png" />
+    <Resource Include="Resources\blue_block.png" />
+    <Resource Include="Resources\green_block.png" />
+    <Resource Include="Resources\orange_block.png" />
+    <Resource Include="Resources\purple_block.png" />
+    <Resource Include="Resources\red_block.png" />
+    <Resource Include="Resources\teal_block.png" />
+    <Resource Include="Resources\white_block.png" />
+    <Resource Include="Resources\yellow_block.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Blocks.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Blocks.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Blocks.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Blocks.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
