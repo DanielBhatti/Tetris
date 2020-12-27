@@ -2,7 +2,6 @@ C:\Users\bhatt\Documents\Programming\Tetris\Tetris\bin\x64\Debug\net5.0\Tetris.d
 C:\Users\bhatt\Documents\Programming\Tetris\Tetris\bin\x64\Debug\net5.0\Tetris.dll
 C:\Users\bhatt\Documents\Programming\Tetris\Tetris\bin\x64\Debug\net5.0\ref\Tetris.dll
 C:\Users\bhatt\Documents\Programming\Tetris\Tetris\bin\x64\Debug\net5.0\Tetris.pdb
-C:\Users\bhatt\Documents\Programming\Tetris\Tetris\obj\x64\Debug\net5.0\Tetris.csprojAssemblyReference.cache
 C:\Users\bhatt\Documents\Programming\Tetris\Tetris\obj\x64\Debug\net5.0\Tetris.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\bhatt\Documents\Programming\Tetris\Tetris\obj\x64\Debug\net5.0\Tetris.AssemblyInfoInputs.cache
 C:\Users\bhatt\Documents\Programming\Tetris\Tetris\obj\x64\Debug\net5.0\Tetris.AssemblyInfo.cs
@@ -10,3 +9,4 @@ C:\Users\bhatt\Documents\Programming\Tetris\Tetris\obj\x64\Debug\net5.0\Tetris.c
 C:\Users\bhatt\Documents\Programming\Tetris\Tetris\obj\x64\Debug\net5.0\Tetris.dll
 C:\Users\bhatt\Documents\Programming\Tetris\Tetris\obj\x64\Debug\net5.0\ref\Tetris.dll
 C:\Users\bhatt\Documents\Programming\Tetris\Tetris\obj\x64\Debug\net5.0\Tetris.pdb
+C:\Users\bhatt\Documents\Programming\Tetris\Tetris\obj\x64\Debug\net5.0\Tetris.csprojAssemblyReference.cache

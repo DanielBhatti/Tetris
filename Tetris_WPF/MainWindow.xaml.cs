@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Tetris;
 
 namespace Tetris_WPF
 {
@@ -28,20 +28,29 @@ namespace Tetris_WPF
             _mainViewModel = new MainViewModel();
             DataContext = _mainViewModel;
 
-            Grid_Tetris.Rows = _mainViewModel.TetrisGrid.Height;
-            Grid_Tetris.Columns = _mainViewModel.TetrisGrid.Width;
+            Grid_Tetris.Rows = _mainViewModel.TetrisField.Height;
+            Grid_Tetris.Columns = _mainViewModel.TetrisField.Width;
 
-            for (int i = 0; i < _mainViewModel.TetrisGrid.Height; i++)
+            for (int i = 0; i < _mainViewModel.TetrisField.Width; i++)
             {
-                for (int j = 0; j < _mainViewModel.TetrisGrid.Width; j++)
+                for (int j = 0; j < _mainViewModel.TetrisField.Height; j++)
                 {
-                    BitmapImage b = new BitmapImage();
-                    b.BeginInit();
-                    b.UriSource = new Uri(@"C:\Users\bhatt\Documents\Programming\Tetris\Tetris_WPF\Resources\white_block.png");
-                    b.EndInit();
-
+                    Cell cell = _mainViewModel.TetrisField.Cells[i, j];
                     Image image = new Image();
-                    image.Source = b;
+
+                    MultiBinding multiBinding = new MultiBinding();
+                    Binding binding1 = new Binding("TetrisField.Cells");
+                    binding1.Source = _mainViewModel;
+                    Binding binding2 = new Binding();
+                    binding2.Source = i;
+                    Binding binding3 = new Binding();
+                    binding3.Source = j;
+                    multiBinding.Converter = new ColorToImageSourceConverter();
+                    multiBinding.Bindings.Add(binding1);
+                    multiBinding.Bindings.Add(binding2);
+                    multiBinding.Bindings.Add(binding3);
+
+                    image.SetBinding(Image.SourceProperty, multiBinding);
                     image.Stretch = Stretch.Fill;
 
                     Grid.SetRow(image, i);

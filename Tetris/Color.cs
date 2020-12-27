@@ -18,6 +18,8 @@ namespace Tetris
         Yellow,
         Green,
         Purple,
-        Red
+        Red,
+        Black,
+        White
     }
 }

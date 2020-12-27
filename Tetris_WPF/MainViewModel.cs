@@ -8,11 +8,11 @@ namespace Tetris_WPF
 {
     public class MainViewModel : ViewModelBase
     {
-        public Grid TetrisGrid { get; set; }
+        public Field TetrisField { get; set; }
 
         public MainViewModel()
         {
-            TetrisGrid = new Grid();
+            TetrisField = new Field();
         }
     }
 }

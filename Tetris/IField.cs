@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    public interface IGrid
+    public interface IField
     {
         int Width { get; }
         int Height { get; }

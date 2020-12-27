@@ -10,7 +10,7 @@ namespace Tetris
     /// If a block is placed into the region (i.e. within the bounds), the grid should automatically attempt to find a portion of the region where it does fit.
     /// If a piece appears where a <see cref="Cell"/> has already been filled by a block, this is a game over.
     /// </summary>
-    public class Grid : IGrid
+    public class Field : IField
     {
         public int Width { get; }
         public int Height { get; }
@@ -22,13 +22,20 @@ namespace Tetris
 
         private IPieceGenerator PieceGenerator { get; }
 
-        public Grid(int width = 10, int height = 24)
+        public Field(int width = 10, int height = 24)
         {
             if (width < 4 || height < 4) throw new ArgumentOutOfRangeException("Width and height of the Grid must both be greater than 4.");
 
             Width = width;
             Height = height;
             Cells = new Cell[width, height];
+            for(int i = 0; i < width; i++)
+            {
+                for(int j = 0; j < height; j++)
+                {
+                    Cells[i, j] = new Cell(Color.White);
+                }
+            }
 
             PieceGenerator = new BPSGenerator();
             CenterPosition = new Position(width / 2, height - 2);
