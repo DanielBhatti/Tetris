@@ -19,6 +19,7 @@ namespace Tetris
 
         public Game()
         {
+            Field = new Field();
             PieceGenerator = new BPSGenerator();
             CenterPosition = new Position(Field.Width / 2, Field.Height - 2);
             FilledPositions = new List<Position>() { };

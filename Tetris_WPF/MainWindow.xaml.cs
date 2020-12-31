@@ -28,14 +28,14 @@ namespace Tetris_WPF
             _mainViewModel = new MainViewModel();
             DataContext = _mainViewModel;
 
-            Grid_Tetris.Rows = _mainViewModel.TetrisField.Height;
-            Grid_Tetris.Columns = _mainViewModel.TetrisField.Width;
+            Grid_Tetris.Rows = _mainViewModel.GameViewModel.Height;
+            Grid_Tetris.Columns = _mainViewModel.GameViewModel.Width;
 
-            for (int i = 0; i < _mainViewModel.TetrisField.Width; i++)
+            for (int i = 0; i < _mainViewModel.GameViewModel.Width; i++)
             {
-                for (int j = 0; j < _mainViewModel.TetrisField.Height; j++)
+                for (int j = 0; j < _mainViewModel.GameViewModel.Height; j++)
                 {
-                    Cell cell = _mainViewModel.TetrisField.Cells[i, j];
+                    Cell cell = _mainViewModel.GameViewModel.Cells[i, j];
                     Image image = new Image();
 
                     MultiBinding multiBinding = new MultiBinding();
