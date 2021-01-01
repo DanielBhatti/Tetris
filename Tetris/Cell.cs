@@ -16,7 +16,7 @@ namespace Tetris
         public Color Color { get; set; }
         public bool IsFilled { get; private set; }
 
-        public Cell(Color color = Color.Transparent)
+        public Cell(Color color = Color.White)
         {
             Color = color;
         }
@@ -28,7 +28,7 @@ namespace Tetris
 
         public void Unfill()
         {
-            Color = Color.Transparent;
+            Color = Color.White;
         }
     }
 }

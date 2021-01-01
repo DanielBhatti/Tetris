@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="900" Width="800"
 >
-    <UniformGrid Name="Grid_Tetris" Width="5in" Height="8in">
-    </UniformGrid>
+    <Grid Name="Grid_Tetris" Width="5in" Height="8in">
+    </Grid>
 </Window>

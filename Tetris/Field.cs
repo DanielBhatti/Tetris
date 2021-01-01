@@ -16,16 +16,16 @@ namespace Tetris
         public int Height { get; }
         public Cell[,] Cells { get; }
 
-        public Field(int height = 24, int width = 10)
+        public Field(int width = 10, int height = 24)
         {
             if (width < 4 || height < 4) throw new ArgumentOutOfRangeException("Width and height of the Grid must both be greater than 4.");
 
             Width = width;
             Height = height;
-            Cells = new Cell[height, width];
-            for(int i = 0; i < height; i++)
+            Cells = new Cell[width, height];
+            for(int i = 0; i < width; i++)
             {
-                for(int j = 0; j < width; j++)
+                for(int j = 0; j < height; j++)
                 {
                     Cells[i, j] = new Cell(Color.White);
                 }

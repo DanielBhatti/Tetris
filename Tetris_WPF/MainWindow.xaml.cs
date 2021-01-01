@@ -28,14 +28,16 @@ namespace Tetris_WPF
             _mainViewModel = new MainViewModel();
             DataContext = _mainViewModel;
 
-            Grid_Tetris.Rows = _mainViewModel.GameViewModel.Height;
-            Grid_Tetris.Columns = _mainViewModel.GameViewModel.Width;
+            int fieldWidth = _mainViewModel.GameViewModel.Width;
+            int fieldHeight = _mainViewModel.GameViewModel.Height;
 
-            for (int i = 0; i < _mainViewModel.GameViewModel.Height; i++)
+            for (int i = 0; i < fieldWidth; i++) Grid_Tetris.ColumnDefinitions.Add(new ColumnDefinition());
+            for (int j = 0; j < fieldHeight; j++) Grid_Tetris.RowDefinitions.Add(new RowDefinition());
+
+            for (int i = 0; i < fieldWidth; i++)
             {
-                for (int j = 0; j < _mainViewModel.GameViewModel.Width; j++)
+                for (int j = 0; j < fieldHeight; j++)
                 {
-                    Cell cell = _mainViewModel.GameViewModel.Cells[i, j];
                     Image image = new Image();
 
                     MultiBinding multiBinding = new MultiBinding();
@@ -53,8 +55,8 @@ namespace Tetris_WPF
                     image.SetBinding(Image.SourceProperty, multiBinding);
                     image.Stretch = Stretch.Fill;
 
-                    Grid.SetRow(image, i);
-                    Grid.SetColumn(image, j);
+                    Grid.SetColumn(image, i);
+                    Grid.SetRow(image, fieldHeight - 1 - j);
                     Grid_Tetris.Children.Add(image);
                 }
             }

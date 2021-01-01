@@ -21,7 +21,7 @@ namespace Tetris
         {
             Field = new Field();
             PieceGenerator = new BPSGenerator();
-            CenterPosition = new Position(Field.Height - 4, Field.Width / 2);
+            CenterPosition = new Position(Field.Width / 2, Field.Height - 4);
             CurrentPosition = new Position(CenterPosition.X, CenterPosition.Y);
             NextPiece();
             FillCells();
@@ -29,17 +29,17 @@ namespace Tetris
 
         public void MoveLeft()
         {
-            Move(0, -1);
+            Move(-1, 0);
         }
 
         public void MoveRight()
         {
-            Move(0, 1);
+            Move(1, 0);
         }
 
         public void MoveDown()
         {
-            Move(-1, 0);
+            Move(0, -1);
         }
 
         public void Move(int x, int y)
@@ -87,7 +87,6 @@ namespace Tetris
         public void NextPiece()
         {
             CurrentPiece = PieceGenerator.PopNextPiece();
-            FillCells();
         }
 
         private void FillCells()
@@ -112,18 +111,16 @@ namespace Tetris
 
         private bool IsMoveValid(int xMove, int yMove)
         {
-            bool isMoveValid = true;
             foreach (Position p in CurrentPiece.RelativePositions)
             {
                 int newX = CurrentPosition.X + xMove + p.X;
                 int newY = CurrentPosition.Y + yMove + p.Y;
                 if (newX < 0 || newY < 0 || newX >= Field.Width || newY >= Field.Height || Cells[newX, newY].IsFilled)
                 {
-                    isMoveValid = false;
-                    break;
+                    return false;
                 }
             }
-            return isMoveValid;
+            return true;
         }
 
         private void ClearAllLines()
