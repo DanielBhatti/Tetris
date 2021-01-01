@@ -39,7 +39,7 @@ namespace Tetris_WPF
                     Image image = new Image();
 
                     MultiBinding multiBinding = new MultiBinding();
-                    Binding binding1 = new Binding("GameViewModel");
+                    Binding binding1 = new Binding("GameViewModel.Cells");
                     binding1.Source = _mainViewModel;
                     Binding binding2 = new Binding();
                     binding2.Source = i;

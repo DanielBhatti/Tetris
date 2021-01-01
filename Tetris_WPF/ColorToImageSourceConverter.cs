@@ -15,7 +15,7 @@ namespace Tetris_WPF
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            Cell cell = ((GameViewModel)values[0])[(int)values[1], (int)values[2]];
+            Cell cell = ((Cell[,])values[0])[(int)values[1], (int)values[2]];
 
             BitmapImage b = new BitmapImage();
             b.BeginInit();
