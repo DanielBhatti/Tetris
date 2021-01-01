@@ -25,14 +25,14 @@ namespace Tetris
             Color = color;
         }
 
-        public void Reset()
-        {
-            Color = Color.Transparent;
-        }
-
         public void Fill(Color color)
         {
             Color = color;
+        }
+
+        public void Unfill()
+        {
+            Color = Color.Transparent;
         }
     }
 }
