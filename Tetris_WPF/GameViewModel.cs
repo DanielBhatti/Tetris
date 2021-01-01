@@ -58,7 +58,7 @@ namespace Tetris_WPF
         }
         public void HoldPiece()
         {
-            _game.MoveRight();
+            _game.HoldPiece();
             RaisePropertyChanged(nameof(_game.Cells));
         }
     }

@@ -39,7 +39,8 @@ namespace Tetris
 
         public void MoveDown()
         {
-            Move(0, -1);
+            if (IsMoveValid(0, -1)) Move(0, -1);
+            else SetPiece();
         }
 
         public void Move(int x, int y)
@@ -64,24 +65,40 @@ namespace Tetris
 
         public void RotateClockwise()
         {
-            throw new NotImplementedException();
+            UnfillCells();
+            CurrentPiece.RotateClockwise();
+            FillCells();
         }
 
         public void RotateCounterclockwise()
         {
-            throw new NotImplementedException();
+            UnfillCells();
+            CurrentPiece.RotateCounterclockwise();
+            FillCells();
         }
 
         public void HoldPiece()
         {
-            HeldPiece = CurrentPiece;
-            NextPiece();
+            UnfillCells();
+            if(HeldPiece == null)
+            {
+                HeldPiece = CurrentPiece;
+                NextPiece();
+            }
+            else
+            {
+                (CurrentPiece, HeldPiece) = (HeldPiece, CurrentPiece);
+            }
+            ResetCurrentPosition();
+            FillCells();
         }
 
         public void SetPiece()
         {
             FillCells();
             ClearAllLines();
+            ResetCurrentPosition();
+            NextPiece();
         }
 
         public void NextPiece()
@@ -158,6 +175,12 @@ namespace Tetris
                 if (!Cells[row, col].IsFilled) isFilled = false;
             }
             return isFilled;
+        }
+
+        private void ResetCurrentPosition()
+        {
+            CurrentPosition.X = CenterPosition.X;
+            CurrentPosition.Y = CenterPosition.Y;
         }
     }
 }

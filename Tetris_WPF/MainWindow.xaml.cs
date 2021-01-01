@@ -61,7 +61,7 @@ namespace Tetris_WPF
                 }
             }
 
-            EventManager.RegisterClassHandler(typeof(MainWindow), TextBox.PreviewKeyUpEvent, new KeyEventHandler(WindowKeyDownEvent));
+            EventManager.RegisterClassHandler(typeof(MainWindow), MainWindow.PreviewKeyDownEvent, new KeyEventHandler(WindowKeyDownEvent));
         }
 
         private void WindowKeyDownEvent(object sender, KeyEventArgs e)
@@ -71,7 +71,8 @@ namespace Tetris_WPF
             if (e.Key == Key.Down) _mainViewModel.GameViewModel.MoveDown();
             if (e.Key == Key.Space) _mainViewModel.GameViewModel.HardDrop();
             if (e.Key == Key.C) _mainViewModel.GameViewModel.HoldPiece();
-            
+            if (e.Key == Key.Z) _mainViewModel.GameViewModel.RotateCounterclockwise();
+            if (e.Key == Key.X) _mainViewModel.GameViewModel.RotateClockwise();
         }
     }
 }
