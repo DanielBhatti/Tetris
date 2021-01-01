@@ -36,7 +36,7 @@ namespace Tetris_WPF
             switch (color)
             {
                 case Tetris.Color.Transparent:
-                    throw new NotImplementedException("Transparent color has not yet been implemented.");
+                    return new Uri(Path.Combine(basePath, "white_block.png"));
                 case Tetris.Color.Blue:
                     return new Uri(Path.Combine(basePath, "blue_block.png"));
                 case Tetris.Color.Green:
