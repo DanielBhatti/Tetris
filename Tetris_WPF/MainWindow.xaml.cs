@@ -31,9 +31,9 @@ namespace Tetris_WPF
             Grid_Tetris.Rows = _mainViewModel.GameViewModel.Height;
             Grid_Tetris.Columns = _mainViewModel.GameViewModel.Width;
 
-            for (int i = 0; i < _mainViewModel.GameViewModel.Width; i++)
+            for (int i = 0; i < _mainViewModel.GameViewModel.Height; i++)
             {
-                for (int j = 0; j < _mainViewModel.GameViewModel.Height; j++)
+                for (int j = 0; j < _mainViewModel.GameViewModel.Width; j++)
                 {
                     Cell cell = _mainViewModel.GameViewModel.Cells[i, j];
                     Image image = new Image();

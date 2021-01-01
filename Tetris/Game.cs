@@ -21,7 +21,7 @@ namespace Tetris
         {
             Field = new Field();
             PieceGenerator = new BPSGenerator();
-            CenterPosition = new Position(Field.Width / 2, Field.Height - 4);
+            CenterPosition = new Position(Field.Height - 4, Field.Width / 2);
             CurrentPosition = new Position(CenterPosition.X, CenterPosition.Y);
             NextPiece();
             FillCells();
@@ -29,12 +29,12 @@ namespace Tetris
 
         public void MoveLeft()
         {
-            Move(-1, 0);
+            Move(0, -1);
         }
 
         public void MoveRight()
         {
-            Move(1, 0);
+            Move(0, 1);
         }
 
         public void MoveDown()
