@@ -11,9 +11,9 @@ namespace Tetris
         public IField Field { get; }
         public TetrisPiece HeldPiece { get; set; }
         public TetrisPiece CurrentPiece { get; set; }
+        public Position CurrentPosition { get; set; }
         public IPieceGenerator PieceGenerator { get; }
 
-        public List<Position> FilledPositions { get; set; }
         public Position CenterPosition { get; }
         public Cell[,] Cells { get => Field.Cells; }
 
@@ -22,54 +22,33 @@ namespace Tetris
             Field = new Field();
             PieceGenerator = new BPSGenerator();
             CenterPosition = new Position(Field.Width / 2, Field.Height - 2);
-            FilledPositions = new List<Position>() { };
-            NextPiece();
-            foreach (Position p in CurrentPiece.Positions)
-            {
-                FilledPositions.Add(new Position(p.X + CenterPosition.X, p.Y + CenterPosition.Y));
-            }
+            CurrentPosition = CenterPosition;
             NextPiece();
         }
 
         public void MoveLeft()
         {
-            bool isMoveValid = true;
-            foreach (Position p in FilledPositions)
-            {
-                if (p.X - 1 >= 0 || Cells[p.X - 1, p.Y].IsFilled)
-                {
-                    isMoveValid = false;
-                }
-            }
-
-            if (isMoveValid)
-            {
-                foreach (Position p in FilledPositions)
-                {
-                    p.X = p.X - 1;
-                }
-            }
+            Move(-1, 0);
         }
 
         public void MoveRight()
         {
-            if (IsMoveValid(0, 1))
-            {
-                foreach (Position p in FilledPositions)
-                {
-                    p.X = p.X + 1;
-                }
-            }
+            Move(1, 0);
         }
 
         public void MoveDown()
         {
-            if (IsMoveValid(0, -1))
+            Move(0, -1);
+        }
+
+        public void Move(int x, int y)
+        {
+            if(IsMoveValid(x, y))
             {
-                foreach (Position p in FilledPositions)
-                {
-                    p.Y = p.Y - 1;
-                }
+                UnfillCells();
+                CurrentPosition.X += x;
+                CurrentPosition.Y += y;
+                FillCells();
             }
         }
 
@@ -96,16 +75,11 @@ namespace Tetris
         {
             HeldPiece = CurrentPiece;
             NextPiece();
-            ResetPositions();
         }
 
         public void SetPiece()
         {
-            foreach (Position p in FilledPositions)
-            {
-                Cells[p.X, p.Y] = new Cell(CurrentPiece.Color);
-            }
-
+            FillCells();
             ClearAllLines();
         }
 
@@ -114,26 +88,39 @@ namespace Tetris
             CurrentPiece = PieceGenerator.PopNextPiece();
         }
 
+        private void FillCells()
+        {
+            foreach(Position p in CurrentPiece.Positions)
+            {
+                int x = p.X + CurrentPosition.X;
+                int y = p.Y + CurrentPosition.Y;
+                Cells[x, y].Fill(CurrentPiece.Color);
+            }
+        }
+
+        private void UnfillCells()
+        {
+            foreach (Position p in CurrentPiece.Positions)
+            {
+                int x = p.X + CurrentPosition.X;
+                int y = p.Y + CurrentPosition.Y;
+                Cells[x, y].Unfill();
+            }
+        }
+
         private bool IsMoveValid(int xMove, int yMove)
         {
             bool isMoveValid = true;
-            foreach (Position p in FilledPositions)
+            foreach (Position p in CurrentPiece.Positions)
             {
-                if (p.Y - 1 >= 0 || Cells[p.X, p.Y - 1].IsFilled)
+                int newX = CurrentPosition.X + xMove + p.X;
+                int newY = CurrentPosition.Y + yMove + p.Y;
+                if (newX < 0 || newY < 0 || newX >= Field.Width || newY >= Field.Height || Cells[newX, newY].IsFilled)
                 {
                     isMoveValid = false;
                 }
             }
             return isMoveValid;
-        }
-
-        private void ResetPositions()
-        {
-            FilledPositions.Clear();
-            foreach (Position p in CurrentPiece.Positions)
-            {
-                FilledPositions.Add(new Position(p.X + CenterPosition.X, p.Y + CenterPosition.Y));
-            }
         }
 
         private void ClearAllLines()
@@ -151,7 +138,7 @@ namespace Tetris
         {
             for (int col = 0; col < Cells.GetLength(1); col++)
             {
-                Cells[row, col].Reset();
+                Cells[row, col].Unfill();
                 int i = col;
                 while (i + 1 < Field.Height)
                 {
