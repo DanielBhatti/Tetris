@@ -39,18 +39,18 @@ namespace Tetris
 
         public void MoveDown()
         {
-            Move(0, -1);
+            Move(-1, 0);
         }
 
         public void Move(int x, int y)
         {
-            if(IsMoveValid(x, y))
+            UnfillCells();
+            if (IsMoveValid(x, y))
             {
-                UnfillCells();
                 CurrentPosition.X += x;
                 CurrentPosition.Y += y;
-                FillCells();
             }
+            FillCells();
         }
 
         public void HardDrop()
@@ -92,7 +92,7 @@ namespace Tetris
 
         private void FillCells()
         {
-            foreach(Position p in CurrentPiece.Positions)
+            foreach(Position p in CurrentPiece.RelativePositions)
             {
                 int x = p.X + CurrentPosition.X;
                 int y = p.Y + CurrentPosition.Y;
@@ -102,7 +102,7 @@ namespace Tetris
 
         private void UnfillCells()
         {
-            foreach (Position p in CurrentPiece.Positions)
+            foreach (Position p in CurrentPiece.RelativePositions)
             {
                 int x = p.X + CurrentPosition.X;
                 int y = p.Y + CurrentPosition.Y;
@@ -110,24 +110,14 @@ namespace Tetris
             }
         }
 
-        private void LockCells()
-        {
-            foreach (Position p in CurrentPiece.Positions)
-            {
-                int x = p.X + CurrentPosition.X;
-                int y = p.Y + CurrentPosition.Y;
-                Cells[x, y].Lock();
-            }
-        }
-
         private bool IsMoveValid(int xMove, int yMove)
         {
             bool isMoveValid = true;
-            foreach (Position p in CurrentPiece.Positions)
+            foreach (Position p in CurrentPiece.RelativePositions)
             {
                 int newX = CurrentPosition.X + xMove + p.X;
                 int newY = CurrentPosition.Y + yMove + p.Y;
-                if (newX < 0 || newY < 0 || newX >= Field.Width || newY >= Field.Height || Cells[newX, newY].IsLocked)
+                if (newX < 0 || newY < 0 || newX >= Field.Width || newY >= Field.Height || Cells[newX, newY].IsFilled)
                 {
                     isMoveValid = false;
                     break;

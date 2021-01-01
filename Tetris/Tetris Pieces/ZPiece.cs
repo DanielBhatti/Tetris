@@ -10,7 +10,7 @@ namespace Tetris
     {
         public ZPiece(Color color = Color.Green)
         {
-            Positions = new Position[4]
+            RelativePositions = new Position[4]
             {
                 new Position(-1, 0),
                 new Position(0, 0),

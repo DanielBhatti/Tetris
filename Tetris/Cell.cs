@@ -15,7 +15,6 @@ namespace Tetris
     {
         public Color Color { get; set; }
         public bool IsFilled { get; private set; }
-        public bool IsLocked { get; private set; }
 
         public Cell(Color color = Color.Transparent)
         {
@@ -30,16 +29,6 @@ namespace Tetris
         public void Unfill()
         {
             Color = Color.Transparent;
-        }
-
-        public void Lock()
-        {
-            IsLocked = true;
-        }
-
-        public void Unlock()
-        {
-            IsLocked = false;
         }
     }
 }

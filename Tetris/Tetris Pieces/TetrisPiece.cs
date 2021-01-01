@@ -13,23 +13,23 @@ namespace Tetris
     /// </summary>
     public class TetrisPiece : ITetrisPiece
     {
-        public int NumberOfBlocks { get => Positions.Length; }
-        public Position[] Positions { get; protected set; }
+        public int NumberOfBlocks { get => RelativePositions.Length; }
+        public Position[] RelativePositions { get; protected set; }
         public Color Color { get; set; }
 
         public void RotateClockwise()
         {
-            for(int i = 0; i < Positions.Length; i++)
+            for(int i = 0; i < RelativePositions.Length; i++)
             {
-                Positions[i] = new Position(Positions[i].Y, -1 * Positions[i].X);
+                RelativePositions[i] = new Position(RelativePositions[i].Y, -1 * RelativePositions[i].X);
             }
         }
 
         public void RotateCounterclockwise()
         {
-            for (int i = 0; i < Positions.Length; i++)
+            for (int i = 0; i < RelativePositions.Length; i++)
             {
-                Positions[i] = new Position(-1 * Positions[i].Y, Positions[i].X);
+                RelativePositions[i] = new Position(-1 * RelativePositions[i].Y, RelativePositions[i].X);
             }
         }
     }

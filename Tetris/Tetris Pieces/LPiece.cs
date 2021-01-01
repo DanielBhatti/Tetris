@@ -10,7 +10,7 @@ namespace Tetris
     {
         public LPiece(Color color = Color.Orange)
         {
-            Positions = new Position[4]
+            RelativePositions = new Position[4]
             {
                 new Position(0, 1),
                 new Position(0, 0),

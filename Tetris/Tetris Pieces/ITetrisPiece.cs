@@ -9,7 +9,7 @@ namespace Tetris
     public interface ITetrisPiece
     {
         int NumberOfBlocks { get; }
-        Position[] Positions { get; }
+        Position[] RelativePositions { get; }
         Color Color { get; }
 
         void RotateClockwise();
