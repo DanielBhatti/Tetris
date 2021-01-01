@@ -24,11 +24,13 @@ namespace Tetris
         public void Fill(Color color)
         {
             Color = color;
+            IsFilled = true;
         }
 
         public void Unfill()
         {
             Color = Color.White;
+            IsFilled = false;
         }
     }
 }

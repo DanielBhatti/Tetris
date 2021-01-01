@@ -16,6 +16,7 @@ namespace Tetris
 
         public Position CenterPosition { get; }
         public Cell[,] Cells { get => Field.Cells; }
+        private bool _canHold = true;
 
         public Game()
         {
@@ -45,13 +46,13 @@ namespace Tetris
 
         public void Move(int x, int y)
         {
-            UnfillCells();
             if (IsMoveValid(x, y))
             {
+                UnfillCells();
                 CurrentPosition.X += x;
                 CurrentPosition.Y += y;
+                FillCells();
             }
-            FillCells();
         }
 
         public void HardDrop()
@@ -79,18 +80,22 @@ namespace Tetris
 
         public void HoldPiece()
         {
-            UnfillCells();
-            if(HeldPiece == null)
+            if(_canHold)
             {
-                HeldPiece = CurrentPiece;
-                NextPiece();
+                UnfillCells();
+                if (HeldPiece == null)
+                {
+                    HeldPiece = CurrentPiece;
+                    NextPiece();
+                }
+                else
+                {
+                    (CurrentPiece, HeldPiece) = (HeldPiece, CurrentPiece);
+                }
+                ResetCurrentPosition();
+                FillCells();
+                _canHold = false;
             }
-            else
-            {
-                (CurrentPiece, HeldPiece) = (HeldPiece, CurrentPiece);
-            }
-            ResetCurrentPosition();
-            FillCells();
         }
 
         public void SetPiece()
@@ -99,6 +104,7 @@ namespace Tetris
             ClearAllLines();
             ResetCurrentPosition();
             NextPiece();
+            _canHold = true;
         }
 
         public void NextPiece()
@@ -128,53 +134,55 @@ namespace Tetris
 
         private bool IsMoveValid(int xMove, int yMove)
         {
+            UnfillCells();
+            bool isMoveValid = true;
             foreach (Position p in CurrentPiece.RelativePositions)
             {
                 int newX = CurrentPosition.X + xMove + p.X;
                 int newY = CurrentPosition.Y + yMove + p.Y;
                 if (newX < 0 || newY < 0 || newX >= Field.Width || newY >= Field.Height || Cells[newX, newY].IsFilled)
                 {
-                    return false;
+                    isMoveValid = false;
+                    break;
                 }
             }
-            return true;
+            FillCells();
+            return isMoveValid;
         }
 
         private void ClearAllLines()
         {
-            for (int row = 0; row < Cells.GetLength(0); row++)
+            for (int yRow = Cells.GetLength(1) - 1; yRow >= 0; yRow--)
             {
-                if (IsRowFilled(row))
+                if (IsRowFilled(yRow))
                 {
-                    ClearLine(row);
+                    ClearLine(yRow);
                 }
             }
         }
 
-        private void ClearLine(int row)
+        private void ClearLine(int yRow)
         {
-            for (int col = 0; col < Cells.GetLength(1); col++)
+            for (int xCol = 0; xCol < Cells.GetLength(0); xCol++)
             {
-                Cells[row, col].Unfill();
-                int i = col;
-                while (i + 1 < Field.Height)
+                Cells[xCol, yRow].Unfill();
+                int i = yRow;
+                while (i < Field.Height - 2)
                 {
-                    if (i == Field.Height) break;
-
-                    Cells[row, i] = Cells[row, i + 1];
+                    if (Cells[xCol, i + 1].IsFilled) Cells[xCol, i].Fill(Cells[xCol, i + 1].Color);
+                    else Cells[xCol, i].Unfill();
                     i += 1;
                 }
             }
         }
 
-        private bool IsRowFilled(int row)
+        private bool IsRowFilled(int yRow)
         {
-            bool isFilled = true;
-            for (int col = 0; col < Cells.GetLength(1); col++)
+            for (int xCol = 0; xCol < Cells.GetLength(0); xCol++)
             {
-                if (!Cells[row, col].IsFilled) isFilled = false;
+                if (!Cells[xCol, yRow].IsFilled) return false;
             }
-            return isFilled;
+            return true;
         }
 
         private void ResetCurrentPosition()
