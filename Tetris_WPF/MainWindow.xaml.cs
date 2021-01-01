@@ -60,6 +60,18 @@ namespace Tetris_WPF
                     Grid_Tetris.Children.Add(image);
                 }
             }
+
+            EventManager.RegisterClassHandler(typeof(MainWindow), TextBox.PreviewKeyUpEvent, new KeyEventHandler(WindowKeyDownEvent));
+        }
+
+        private void WindowKeyDownEvent(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left) _mainViewModel.GameViewModel.MoveLeft();
+            if (e.Key == Key.Right) _mainViewModel.GameViewModel.MoveRight();
+            if (e.Key == Key.Down) _mainViewModel.GameViewModel.MoveDown();
+            if (e.Key == Key.Space) _mainViewModel.GameViewModel.HardDrop();
+            if (e.Key == Key.C) _mainViewModel.GameViewModel.HoldPiece();
+            
         }
     }
 }
