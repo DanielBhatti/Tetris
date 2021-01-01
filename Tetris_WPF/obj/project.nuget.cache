@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "zllcE/FgI1v55eabFwe6RJ08GcLZZFFUWoTcRegluTsjM0izZX2QYkVfuSIvUyqfnkCmC61aUKZpegsnJafzMg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\bhatt\\Documents\\Programming\\Tetris\\Tetris_WPF\\Tetris_WPF.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\bhatt\\.nuget\\packages\\commonservicelocator\\2.0.5\\commonservicelocator.2.0.5.nupkg.sha512",
+    "C:\\Users\\bhatt\\.nuget\\packages\\mvvmlightlibsstd10\\5.4.1\\mvvmlightlibsstd10.5.4.1.nupkg.sha512"
+  ],
+  "logs": []
+}
