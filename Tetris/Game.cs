@@ -66,16 +66,22 @@ namespace Tetris
 
         public void RotateClockwise()
         {
-            UnfillCells();
-            CurrentPiece.RotateClockwise();
-            FillCells();
+            if(IsRotationValid(Rotation.Clockwise))
+            {
+                UnfillCells();
+                CurrentPiece.RotateClockwise();
+                FillCells();
+            }
         }
 
         public void RotateCounterclockwise()
         {
-            UnfillCells();
-            CurrentPiece.RotateCounterclockwise();
-            FillCells();
+            if (IsRotationValid(Rotation.Counterclockwise))
+            {
+                UnfillCells();
+                CurrentPiece.RotateCounterclockwise();
+                FillCells();
+            }
         }
 
         public void HoldPiece()
@@ -150,6 +156,47 @@ namespace Tetris
             return isMoveValid;
         }
 
+        private bool IsRotationValid(Rotation rotation)
+        {
+            bool isRotationValid = true;
+            switch(rotation)
+            {
+                case Rotation.Clockwise:
+                    UnfillCells();
+                    CurrentPiece.RotateClockwise();
+                    foreach(Position p in CurrentPiece.RelativePositions)
+                    {
+                        int newX = CurrentPosition.X + p.X;
+                        int newY = CurrentPosition.Y + p.Y;
+                        if (newX < 0 || newY < 0 || newX >= Field.Width || newY >= Field.Height || Cells[newX, newY].IsFilled)
+                        {
+                            isRotationValid = false;
+                            break;
+                        }
+                    }
+                    CurrentPiece.RotateCounterclockwise();
+                    FillCells();
+                    return isRotationValid;
+                case Rotation.Counterclockwise:
+                    UnfillCells();
+                    CurrentPiece.RotateCounterclockwise();
+                    foreach (Position p in CurrentPiece.RelativePositions)
+                    {
+                        int newX = CurrentPosition.X + p.X;
+                        int newY = CurrentPosition.Y + p.Y;
+                        if (newX < 0 || newY < 0 || newX >= Field.Width || newY >= Field.Height || Cells[newX, newY].IsFilled)
+                        {
+                            isRotationValid = false;
+                            break;
+                        }
+                    }
+                    CurrentPiece.RotateClockwise();
+                    FillCells();
+                    return isRotationValid;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
         private void ClearAllLines()
         {
             for (int yRow = Cells.GetLength(1) - 1; yRow >= 0; yRow--)
