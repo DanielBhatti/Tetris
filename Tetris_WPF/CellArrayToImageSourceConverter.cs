@@ -11,7 +11,7 @@ using Tetris;
 
 namespace Tetris_WPF
 {
-    public class ColorToImageSourceConverter : IMultiValueConverter
+    public class CellArrayToImageSourceConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

@@ -7,6 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="900" Width="800"
 >
-    <Grid Name="Grid_Tetris" Width="5in" Height="8in">
-    </Grid>
+    <StackPanel Orientation="Vertical">
+        <TextBlock HorizontalAlignment="Center" Text="Mashi Tetris" FontSize="25"/>
+        <StackPanel Orientation="Horizontal">
+            <Grid Name="Grid_HeldPiece"/>
+            <Grid Name="Grid_Tetris" Width="5in" Height="8in"/>
+        </StackPanel>
+    </StackPanel>
 </Window>

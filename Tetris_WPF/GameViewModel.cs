@@ -15,6 +15,8 @@ namespace Tetris_WPF
         public int Height { get => _game.Field.Height; }
         public int Width { get => _game.Field.Width; }
         public Cell[,] Cells { get => _game.Cells; }
+        public TetrisPiece HeldPiece { get => HeldPiece; }
+        public TetrisPiece[] NextPieces { get => NextPieces; }
 
         public GameViewModel()
         {
@@ -59,7 +61,7 @@ namespace Tetris_WPF
         public void HoldPiece()
         {
             _game.HoldPiece();
-            RaisePropertyChanged(nameof(_game.Cells));
+            RaisePropertyChanged(nameof(HeldPiece));
         }
     }
 }

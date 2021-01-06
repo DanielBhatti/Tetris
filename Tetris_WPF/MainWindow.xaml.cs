@@ -47,7 +47,7 @@ namespace Tetris_WPF
                     binding2.Source = i;
                     Binding binding3 = new Binding();
                     binding3.Source = j;
-                    multiBinding.Converter = new ColorToImageSourceConverter();
+                    multiBinding.Converter = new CellArrayToImageSourceConverter();
                     multiBinding.Bindings.Add(binding1);
                     multiBinding.Bindings.Add(binding2);
                     multiBinding.Bindings.Add(binding3);

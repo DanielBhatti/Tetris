@@ -11,6 +11,7 @@ namespace Tetris
         TetrisPiece CurrentPiece { get; }
         Position CurrentPosition { get; }
         TetrisPiece HeldPiece { get; }
+        TetrisPiece[] NextPieces { get; }
         IPieceGenerator PieceGenerator { get; }
         IField Field { get; }
 

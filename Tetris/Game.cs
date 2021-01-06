@@ -13,10 +13,12 @@ namespace Tetris
         public TetrisPiece CurrentPiece { get; set; }
         public Position CurrentPosition { get; set; }
         public IPieceGenerator PieceGenerator { get; }
+        public TetrisPiece[] NextPieces { get; }
 
         public Position CenterPosition { get; }
         public Cell[,] Cells { get => Field.Cells; }
         private bool _canHold = true;
+        private int _numVisibilePieces = 3;
 
         public Game()
         {
@@ -24,8 +26,8 @@ namespace Tetris
             PieceGenerator = new BPSGenerator();
             CenterPosition = new Position(Field.Width / 2, Field.Height - 4);
             CurrentPosition = new Position(CenterPosition.X, CenterPosition.Y);
+            NextPieces = PieceGenerator.PeekNextPiece(_numVisibilePieces).ToArray();
             NextPiece();
-            FillCells();
         }
 
         public void MoveLeft()
@@ -48,10 +50,10 @@ namespace Tetris
         {
             if (IsMoveValid(x, y))
             {
-                UnfillCells();
+                UncolorCells();
                 CurrentPosition.X += x;
                 CurrentPosition.Y += y;
-                FillCells();
+                ColorCells();
             }
         }
 
@@ -68,9 +70,9 @@ namespace Tetris
         {
             if(IsRotationValid(Rotation.Clockwise))
             {
-                UnfillCells();
+                UncolorCells();
                 CurrentPiece.RotateClockwise();
-                FillCells();
+                ColorCells();
             }
         }
 
@@ -78,9 +80,9 @@ namespace Tetris
         {
             if (IsRotationValid(Rotation.Counterclockwise))
             {
-                UnfillCells();
+                UncolorCells();
                 CurrentPiece.RotateCounterclockwise();
-                FillCells();
+                ColorCells();
             }
         }
 
@@ -88,7 +90,7 @@ namespace Tetris
         {
             if(_canHold)
             {
-                UnfillCells();
+                UncolorCells();
                 if (HeldPiece == null)
                 {
                     HeldPiece = CurrentPiece;
@@ -99,7 +101,7 @@ namespace Tetris
                     (CurrentPiece, HeldPiece) = (HeldPiece, CurrentPiece);
                 }
                 ResetCurrentPosition();
-                FillCells();
+                ColorCells();
                 _canHold = false;
             }
         }
@@ -116,6 +118,31 @@ namespace Tetris
         public void NextPiece()
         {
             CurrentPiece = PieceGenerator.PopNextPiece();
+            TetrisPiece[] pieces = PieceGenerator.PeekNextPiece(_numVisibilePieces).ToArray();
+            for(int i = 0; i < _numVisibilePieces; i++)
+            {
+                NextPieces[i] = pieces[i];
+            }
+        }
+
+        private void ColorCells()
+        {
+            foreach (Position p in CurrentPiece.RelativePositions)
+            {
+                int x = p.X + CurrentPosition.X;
+                int y = p.Y + CurrentPosition.Y;
+                Cells[x, y].Color = CurrentPiece.Color;
+            }
+        }
+
+        private void UncolorCells()
+        {
+            foreach (Position p in CurrentPiece.RelativePositions)
+            {
+                int x = p.X + CurrentPosition.X;
+                int y = p.Y + CurrentPosition.Y;
+                Cells[x, y].Color = Color.White;
+            }
         }
 
         private void FillCells()
@@ -140,7 +167,6 @@ namespace Tetris
 
         private bool IsMoveValid(int xMove, int yMove)
         {
-            UnfillCells();
             bool isMoveValid = true;
             foreach (Position p in CurrentPiece.RelativePositions)
             {
@@ -152,7 +178,6 @@ namespace Tetris
                     break;
                 }
             }
-            FillCells();
             return isMoveValid;
         }
 
@@ -162,7 +187,6 @@ namespace Tetris
             switch(rotation)
             {
                 case Rotation.Clockwise:
-                    UnfillCells();
                     CurrentPiece.RotateClockwise();
                     foreach(Position p in CurrentPiece.RelativePositions)
                     {
@@ -175,10 +199,8 @@ namespace Tetris
                         }
                     }
                     CurrentPiece.RotateCounterclockwise();
-                    FillCells();
                     return isRotationValid;
                 case Rotation.Counterclockwise:
-                    UnfillCells();
                     CurrentPiece.RotateCounterclockwise();
                     foreach (Position p in CurrentPiece.RelativePositions)
                     {
@@ -191,12 +213,12 @@ namespace Tetris
                         }
                     }
                     CurrentPiece.RotateClockwise();
-                    FillCells();
                     return isRotationValid;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
+
         private void ClearAllLines()
         {
             for (int yRow = Cells.GetLength(1) - 1; yRow >= 0; yRow--)
@@ -236,6 +258,13 @@ namespace Tetris
         {
             CurrentPosition.X = CenterPosition.X;
             CurrentPosition.Y = CenterPosition.Y;
+        }
+
+        private Position GetGhostPiecePosition()
+        {
+            Position ghostPosition = new Position(CurrentPosition.X, CurrentPosition.Y);
+
+            return ghostPosition;
         }
     }
 }
