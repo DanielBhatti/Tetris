@@ -9,7 +9,6 @@ namespace Tetris
     public interface IGame
     {
         TetrisPiece CurrentPiece { get; }
-        Position CurrentPosition { get; }
         TetrisPiece HeldPiece { get; }
         TetrisPiece[] NextPieces { get; }
         IPieceGenerator PieceGenerator { get; }

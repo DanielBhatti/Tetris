@@ -10,8 +10,7 @@ namespace Tetris
     {
         public IField Field { get; }
         public TetrisPiece HeldPiece { get; set; }
-        public TetrisPiece CurrentPiece { get; set; }
-        public Position CurrentPosition { get; set; }
+        public TetrisPiece CurrentPiece { get { return CurrentBoardPiece.TetrisPiece; } set { CurrentBoardPiece.TetrisPiece = value; } }
         public IPieceGenerator PieceGenerator { get; }
         public TetrisPiece[] NextPieces { get; }
 
@@ -20,14 +19,28 @@ namespace Tetris
         private bool _canHold = true;
         private int _numVisibilePieces = 3;
 
+        private BoardPiece _currentBoardPiece;
+        private BoardPiece CurrentBoardPiece
+        {
+            get => _currentBoardPiece;
+            set => _currentBoardPiece = value;
+        }
+        private BoardPiece _ghostBoardPiece;
+        private BoardPiece GhostBoardPiece
+        {
+            get => _ghostBoardPiece;
+            set => _ghostBoardPiece = value;
+        }
+
         public Game()
         {
             Field = new Field();
             PieceGenerator = new BPSGenerator();
             CenterPosition = new Position(Field.Width / 2, Field.Height - 4);
-            CurrentPosition = new Position(CenterPosition.X, CenterPosition.Y);
             NextPieces = PieceGenerator.PeekNextPiece(_numVisibilePieces).ToArray();
+            CurrentBoardPiece = new BoardPiece();
             NextPiece();
+            SetGhostPiecePosition();
         }
 
         public void MoveLeft()
@@ -42,24 +55,28 @@ namespace Tetris
 
         public void MoveDown()
         {
-            if (IsMoveValid(0, -1)) Move(0, -1);
+            if (IsMoveValid(ref _currentBoardPiece, 0, -1)) Move(0, -1);
             else SetPiece();
         }
 
         public void Move(int x, int y)
         {
-            if (IsMoveValid(x, y))
+            if (IsMoveValid(ref _currentBoardPiece, x, y))
             {
-                UncolorCells();
-                CurrentPosition.X += x;
-                CurrentPosition.Y += y;
-                ColorCells();
+                UncolorCells(ref _currentBoardPiece);
+                CurrentBoardPiece.Position.X += x;
+                CurrentBoardPiece.Position.Y += y;
+                ColorCells(ref _currentBoardPiece);
+
+                UncolorCells(ref _ghostBoardPiece);
+                SetGhostPiecePosition();
+                ColorCells(ref _ghostBoardPiece);
             }
         }
 
         public void HardDrop()
         {
-            while (IsMoveValid(0, -1))
+            while (IsMoveValid(ref _currentBoardPiece, 0, -1))
             {
                 MoveDown();
             }
@@ -68,21 +85,21 @@ namespace Tetris
 
         public void RotateClockwise()
         {
-            if(IsRotationValid(Rotation.Clockwise))
+            if(IsRotationValid(ref _currentBoardPiece, Rotation.Clockwise))
             {
-                UncolorCells();
+                UncolorCells(ref _currentBoardPiece);
                 CurrentPiece.RotateClockwise();
-                ColorCells();
+                ColorCells(ref _currentBoardPiece);
             }
         }
 
         public void RotateCounterclockwise()
         {
-            if (IsRotationValid(Rotation.Counterclockwise))
+            if (IsRotationValid(ref _currentBoardPiece, Rotation.Counterclockwise))
             {
-                UncolorCells();
+                UncolorCells(ref _currentBoardPiece);
                 CurrentPiece.RotateCounterclockwise();
-                ColorCells();
+                ColorCells(ref _currentBoardPiece);
             }
         }
 
@@ -90,7 +107,7 @@ namespace Tetris
         {
             if(_canHold)
             {
-                UncolorCells();
+                UncolorCells(ref _currentBoardPiece);
                 if (HeldPiece == null)
                 {
                     HeldPiece = CurrentPiece;
@@ -100,24 +117,25 @@ namespace Tetris
                 {
                     (CurrentPiece, HeldPiece) = (HeldPiece, CurrentPiece);
                 }
-                ResetCurrentPosition();
-                ColorCells();
+                ResetCurrentPosition(ref _currentBoardPiece);
+                ColorCells(ref _currentBoardPiece);
                 _canHold = false;
             }
         }
 
         public void SetPiece()
         {
-            FillCells();
+            FillCells(ref _currentBoardPiece);
             ClearAllLines();
-            ResetCurrentPosition();
+            ResetCurrentPosition(ref _currentBoardPiece);
             NextPiece();
             _canHold = true;
         }
 
         public void NextPiece()
         {
-            CurrentPiece = PieceGenerator.PopNextPiece();
+            CurrentBoardPiece.TetrisPiece = PieceGenerator.PopNextPiece();
+            CurrentBoardPiece.Position = new Position(CenterPosition.X, CenterPosition.Y);
             TetrisPiece[] pieces = PieceGenerator.PeekNextPiece(_numVisibilePieces).ToArray();
             for(int i = 0; i < _numVisibilePieces; i++)
             {
@@ -125,53 +143,53 @@ namespace Tetris
             }
         }
 
-        private void ColorCells()
+        private void ColorCells(ref BoardPiece boardPiece)
         {
-            foreach (Position p in CurrentPiece.RelativePositions)
+            foreach (Position p in boardPiece.TetrisPiece.RelativePositions)
             {
-                int x = p.X + CurrentPosition.X;
-                int y = p.Y + CurrentPosition.Y;
-                Cells[x, y].Color = CurrentPiece.Color;
+                int x = p.X + boardPiece.Position.X;
+                int y = p.Y + boardPiece.Position.Y;
+                Cells[x, y].Color = boardPiece.TetrisPiece.Color;
             }
         }
 
-        private void UncolorCells()
+        private void UncolorCells(ref BoardPiece boardPiece)
         {
-            foreach (Position p in CurrentPiece.RelativePositions)
+            foreach (Position p in boardPiece.TetrisPiece.RelativePositions)
             {
-                int x = p.X + CurrentPosition.X;
-                int y = p.Y + CurrentPosition.Y;
+                int x = p.X + boardPiece.Position.X;
+                int y = p.Y + boardPiece.Position.Y;
                 Cells[x, y].Color = Color.White;
             }
         }
 
-        private void FillCells()
+        private void FillCells(ref BoardPiece boardPiece)
         {
-            foreach(Position p in CurrentPiece.RelativePositions)
+            foreach(Position p in boardPiece.TetrisPiece.RelativePositions)
             {
-                int x = p.X + CurrentPosition.X;
-                int y = p.Y + CurrentPosition.Y;
-                Cells[x, y].Fill(CurrentPiece.Color);
+                int x = p.X + boardPiece.Position.X;
+                int y = p.Y + boardPiece.Position.Y;
+                Cells[x, y].Fill(boardPiece.TetrisPiece.Color);
             }
         }
 
-        private void UnfillCells()
+        private void UnfillCells(ref BoardPiece boardPiece)
         {
-            foreach (Position p in CurrentPiece.RelativePositions)
+            foreach (Position p in boardPiece.TetrisPiece.RelativePositions)
             {
-                int x = p.X + CurrentPosition.X;
-                int y = p.Y + CurrentPosition.Y;
+                int x = p.X + boardPiece.Position.X;
+                int y = p.Y + boardPiece.Position.Y;
                 Cells[x, y].Unfill();
             }
         }
 
-        private bool IsMoveValid(int xMove, int yMove)
+        private bool IsMoveValid(ref BoardPiece boardPiece, int xMove, int yMove)
         {
             bool isMoveValid = true;
-            foreach (Position p in CurrentPiece.RelativePositions)
+            foreach (Position p in boardPiece.TetrisPiece.RelativePositions)
             {
-                int newX = CurrentPosition.X + xMove + p.X;
-                int newY = CurrentPosition.Y + yMove + p.Y;
+                int newX = boardPiece.Position.X + xMove + p.X;
+                int newY = boardPiece.Position.Y + yMove + p.Y;
                 if (newX < 0 || newY < 0 || newX >= Field.Width || newY >= Field.Height || Cells[newX, newY].IsFilled)
                 {
                     isMoveValid = false;
@@ -181,38 +199,38 @@ namespace Tetris
             return isMoveValid;
         }
 
-        private bool IsRotationValid(Rotation rotation)
+        private bool IsRotationValid(ref BoardPiece boardPiece, Rotation rotation)
         {
             bool isRotationValid = true;
             switch(rotation)
             {
                 case Rotation.Clockwise:
-                    CurrentPiece.RotateClockwise();
-                    foreach(Position p in CurrentPiece.RelativePositions)
+                    boardPiece.TetrisPiece.RotateClockwise();
+                    foreach(Position p in boardPiece.TetrisPiece.RelativePositions)
                     {
-                        int newX = CurrentPosition.X + p.X;
-                        int newY = CurrentPosition.Y + p.Y;
+                        int newX = boardPiece.Position.X + p.X;
+                        int newY = boardPiece.Position.Y + p.Y;
                         if (newX < 0 || newY < 0 || newX >= Field.Width || newY >= Field.Height || Cells[newX, newY].IsFilled)
                         {
                             isRotationValid = false;
                             break;
                         }
                     }
-                    CurrentPiece.RotateCounterclockwise();
+                    boardPiece.TetrisPiece.RotateCounterclockwise();
                     return isRotationValid;
                 case Rotation.Counterclockwise:
-                    CurrentPiece.RotateCounterclockwise();
-                    foreach (Position p in CurrentPiece.RelativePositions)
+                    boardPiece.TetrisPiece.RotateCounterclockwise();
+                    foreach (Position p in boardPiece.TetrisPiece.RelativePositions)
                     {
-                        int newX = CurrentPosition.X + p.X;
-                        int newY = CurrentPosition.Y + p.Y;
+                        int newX = boardPiece.Position.X + p.X;
+                        int newY = boardPiece.Position.Y + p.Y;
                         if (newX < 0 || newY < 0 || newX >= Field.Width || newY >= Field.Height || Cells[newX, newY].IsFilled)
                         {
                             isRotationValid = false;
                             break;
                         }
                     }
-                    CurrentPiece.RotateClockwise();
+                    boardPiece.TetrisPiece.RotateClockwise();
                     return isRotationValid;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -254,17 +272,22 @@ namespace Tetris
             return true;
         }
 
-        private void ResetCurrentPosition()
+        private void ResetCurrentPosition(ref BoardPiece boardPiece)
         {
-            CurrentPosition.X = CenterPosition.X;
-            CurrentPosition.Y = CenterPosition.Y;
+            boardPiece.Position.X = CenterPosition.X;
+            boardPiece.Position.Y = CenterPosition.Y;
         }
 
-        private Position GetGhostPiecePosition()
+        private BoardPiece SetGhostPiecePosition()
         {
-            Position ghostPosition = new Position(CurrentPosition.X, CurrentPosition.Y);
+            GhostBoardPiece.TetrisPiece = (TetrisPiece)CurrentPiece.GetType().GetConstructor(new Type[] { }).Invoke(new object[] { });
+            GhostBoardPiece.Position = new Position(CurrentBoardPiece.Position.X, CurrentBoardPiece.Position.Y);
+            while(IsMoveValid(ref _ghostBoardPiece, 0, -1))
+            {
+                GhostBoardPiece.Position.Y -= 1;
+            }
 
-            return ghostPosition;
+            return _ghostBoardPiece;
         }
     }
 }
